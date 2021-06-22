@@ -1,0 +1,49 @@
+{
+  "project_info": {
+    "project_number": "426320236715",
+    "firebase_url": "https://status-downloader-316cb.firebaseio.com",
+    "project_id": "status-downloader-316cb",
+    "storage_bucket": "status-downloader-316cb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:426320236715:android:fce875d0a6cd7ae2f427ee",
+        "android_client_info": {
+          "package_name": "com.studio.statussave"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "426320236715-4n49n4tbvcg7hqf7cuu1espvpnamh9k5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.studio.statussave",
+            "certificate_hash": "4cd3968918dcf2a17707126658817ab4eaa9cce0"
+          }
+        },
+        {
+          "client_id": "426320236715-v2o7hu1epgo625a4b6m8ekbr1loi8unh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBXLsr4rW0IKEk4nqEN7ChXfHG197NPQDU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "426320236715-v2o7hu1epgo625a4b6m8ekbr1loi8unh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      },
+      "admob_app_id": "ca-app-pub-1588927510922110~6616171826"
+    }
+  ],
+  "configuration_version": "1"
+}

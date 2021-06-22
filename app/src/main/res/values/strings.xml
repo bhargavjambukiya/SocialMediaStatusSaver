@@ -1,0 +1,36 @@
+<resources>
+    <string name="app_name">Social media status saver</string>
+    <string name="delete">Delete</string>
+    <string name="share_using">Share using</string>
+    <string name="tab_image">Images</string>
+    <string name="tab_video">Videos</string>
+
+    <string name="title_activity_saved_stories">Saved Stories</string>
+    <string name="title_activity_recent_stories">Recent Stories</string>
+    <string name="title_activity_saved_audio">Saved Audio</string>
+    <string name="empty_statement">Sorry, No stories found</string>
+    <string name="imageviewer_error">Oops, Some error occurred</string>
+    <string name="image_deleted">Image Deleted</string>
+    <string name="image_saved">Image Saved</string>
+    <string name="video_saved">Video Saved</string>
+    <string name="image_save_failed">Failed While Save Image</string>
+    <string name="video_save_failed">Failed While Save Video</string>
+    <string name="video_deleted">Video Deleted</string>
+    <string name="no_images_found">No Images Found.</string>
+    <string name="no_videos_found">No Videos Found.</string>
+    <string name="no_audio_found">No audio found</string>
+    <string name="restart">Restart</string>
+    <string name="update_downloaded">App downloaded ad update</string>
+    <!-- TODO - add your ad unit Ids -->
+    <!-- AdMob ad unit IDs -->
+    <string name="admob_app_id">ca-app-pub-1588927510922110~6616171826</string>
+    <string name="banner_home_footer">ca-app-pub-1588927510922110/7096545799</string>
+    <string name="rewarded_video">ca-app-pub-1588927510922110/3975558437</string>
+    <string name="tab_converted_video">Converted videos</string>
+    <string name="title_activity_video_splitter">Converted videos</string>
+    <string name="title_settings">Settings</string>
+    <string name="privacy_policy">Privacy Policy</string>
+    <string name="rate_us">Rate us</string>
+    <string name="rate_share">Share</string>
+
+</resources>
