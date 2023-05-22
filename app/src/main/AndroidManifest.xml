@@ -25,9 +25,12 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".ui.activity.SettingsActivity"
+            android:exported="false"
             android:screenOrientation="portrait" />
-        <activity android:name=".ui.activity.VideoSplitterActivity" />
-        <activity android:name=".ui.activity.MainActivity">
+        <activity android:name=".ui.activity.VideoSplitterActivity"
+            android:exported="false"/>
+        <activity android:name=".ui.activity.MainActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -36,14 +39,18 @@
         </activity>
         <activity
             android:name=".ui.activity.StoriesActivity"
+            android:exported="false"
             android:label="@string/title_activity_saved_stories"
             android:screenOrientation="portrait" />
-        <activity android:name=".ui.activity.ImageViewerActivity" />
+        <activity android:name=".ui.activity.ImageViewerActivity"
+            android:exported="false"/>
         <activity
             android:name=".ui.activity.VideoViewerActivity"
+            android:exported="false"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.activity.AudioActivity"
+            android:exported="false"
             android:screenOrientation="portrait" />
 
         <meta-data
