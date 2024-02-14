@@ -1,102 +1,219 @@
 package com.studio.statussave.ui.fragment;
 
+import android.content.UriPermission;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.StrictMode;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
+import androidx.documentfile.provider.DocumentFile;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.studio.statussave.Models.Status;
 import com.studio.statussave.R;
-import com.studio.statussave.adapters.RecyclerAdapter;
-import com.studio.statussave.adapters.RecyclerInstances;
-import com.studio.statussave.data.FilesData;
+import com.studio.statussave.adapters.VideoAdapter;
+import com.studio.statussave.utils.Common;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.concurrent.Executors;
+
 
 public class VideoFragment extends Fragment {
+
+    private RecyclerView recyclerView;
+    private ProgressBar progressBar;
+    private final List<Status> videoList = new ArrayList<>();
+    private VideoAdapter videoAdapter;
+    private ConstraintLayout container;
+    private SwipeRefreshLayout swipeRefreshLayout;
+    private TextView messageTextView;
     LinearLayout layoutNoRecordFound;
     ImageView imageViewNoRecord;
-    TextView textViewNoRecord;
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
-        View v = inflater.inflate(R.layout.st_video_image_fragment, container, false);
-
-        layoutNoRecordFound = v.findViewById(R.id.layoutNoRecordFound);
-        imageViewNoRecord = v.findViewById(R.id.imageViewNoRecord);
-        textViewNoRecord = v.findViewById(R.id.textViewNoRecord);
-
-        imageViewNoRecord.setImageResource(R.drawable.ic_no_videos);
-        textViewNoRecord.setText(getResources().getString(R.string.no_videos_found));
-
-        if (FilesData.getRecentOrSaved().equals("recent")) {
-            RecyclerInstances.recentVideoRecyclerview = v.findViewById(R.id.videoImageRecyclerView);
-            // use this setting to improve performance if you know that changes
-            // in content do not change the layout size of the RecyclerView
-            RecyclerInstances.recentVideoRecyclerview.setHasFixedSize(true);
-
-            // use a Grid layout manager
-            GridLayoutManager mLayoutManager = new GridLayoutManager(getContext(), 2);
-            RecyclerInstances.recentVideoRecyclerview.setLayoutManager(mLayoutManager);
-
-            if (FilesData.getWhatsAppFilesVideos().isEmpty()) {
-                FilesData.scrapWhatsAppFiles();
-            }
-            if (FilesData.getWhatsAppFilesVideos().size() > 0) {
-                RecyclerInstances.recentVideoAdapter = new RecyclerAdapter(FilesData.getWhatsAppFilesVideos(), getContext(), 'v');
-                RecyclerInstances.recentVideoRecyclerview.setAdapter(RecyclerInstances.recentVideoAdapter);
-            } else {
-                layoutNoRecordFound.setVisibility(View.VISIBLE);
-            }
-        } else if (FilesData.getRecentOrSaved().equals("videoSplitter")) {
-            RecyclerInstances.savedVideoRecyclerview = v.findViewById(R.id.videoImageRecyclerView);
-            // use this setting to improve performance if you know that changes
-            // in content do not change the layout size of the RecyclerView
-            RecyclerInstances.savedVideoRecyclerview.setHasFixedSize(true);
-
-            // use a Grid layout manager
-            GridLayoutManager mLayoutManager = new GridLayoutManager(getContext(), 2);
-            RecyclerInstances.savedVideoRecyclerview.setLayoutManager(mLayoutManager);
-
-            if (FilesData.getSavedFilesVideos().isEmpty()) {
-                FilesData.scrapSavedFiles();
-            }
-
-            if (FilesData.getSplittedFilesVideos().size() > 0) {
-                RecyclerInstances.savedVideoAdapter = new RecyclerAdapter(FilesData.getSplittedFilesVideos(), getContext(), 'v');
-                RecyclerInstances.savedVideoRecyclerview.setAdapter(RecyclerInstances.savedVideoAdapter);
-            } else {
-                layoutNoRecordFound.setVisibility(View.VISIBLE);
-            }
-        } else {
-            RecyclerInstances.savedVideoRecyclerview = v.findViewById(R.id.videoImageRecyclerView);
-            // use this setting to improve performance if you know that changes
-            // in content do not change the layout size of the RecyclerView
-            RecyclerInstances.savedVideoRecyclerview.setHasFixedSize(true);
-
-            // use a Grid layout manager
-            GridLayoutManager mLayoutManager = new GridLayoutManager(getContext(), 2);
-            RecyclerInstances.savedVideoRecyclerview.setLayoutManager(mLayoutManager);
-
-            if (FilesData.getSavedFilesVideos().isEmpty()) {
-                FilesData.scrapSavedFiles();
-            }
-
-            if (FilesData.getSavedFilesVideos().size() > 0) {
-                RecyclerInstances.savedVideoAdapter = new RecyclerAdapter(FilesData.getSavedFilesVideos(), getContext(), 'v');
-                RecyclerInstances.savedVideoRecyclerview.setAdapter(RecyclerInstances.savedVideoAdapter);
-            } else {
-                layoutNoRecordFound.setVisibility(View.VISIBLE);
-            }
-        }
-        return v;
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.st_video_image_fragment, container, false);
     }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+
+        recyclerView = view.findViewById(R.id.videoImageRecyclerView);
+        progressBar = view.findViewById(R.id.progressBarCircular);
+        container = view.findViewById(R.id.stContainer);
+        swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
+        messageTextView = view.findViewById(R.id.textViewNoRecord);
+
+        StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+        StrictMode.setVmPolicy(builder.build());
+
+        swipeRefreshLayout.setColorSchemeColors(ContextCompat.getColor(requireActivity(), android.R.color.holo_orange_dark)
+                , ContextCompat.getColor(requireActivity(), android.R.color.holo_green_dark),
+                ContextCompat.getColor(requireActivity(), R.color.colorPrimary),
+                ContextCompat.getColor(requireActivity(), android.R.color.holo_blue_dark));
+
+        swipeRefreshLayout.setOnRefreshListener(this::getStatus);
+
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), Common.GRID_COUNT));
+
+        getStatus();
+
+        super.onViewCreated(view, savedInstanceState);
+    }
+
+    private void getStatus() {
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+
+            executeNew();
+
+        } else if (Common.STATUS_DIRECTORY.exists()) {
+
+            executeOld();
+
+        } else {
+            messageTextView.setVisibility(View.VISIBLE);
+            messageTextView.setText(R.string.cant_find_whatsapp_dir);
+            Toast.makeText(getActivity(), getString(R.string.cant_find_whatsapp_dir), Toast.LENGTH_SHORT).show();
+            swipeRefreshLayout.setRefreshing(false);
+        }
+
+    }
+
+    private void executeNew() {
+        Executors.newSingleThreadExecutor().execute(() -> {
+            Handler mainHandler = new Handler(Looper.getMainLooper());
+
+            List<UriPermission> list = requireActivity().getContentResolver().getPersistedUriPermissions();
+
+            DocumentFile file = DocumentFile.fromTreeUri(requireActivity(), list.get(0).getUri());
+
+            videoList.clear();
+
+            if (file == null) {
+                mainHandler.post(() -> {
+                    progressBar.setVisibility(View.GONE);
+                    messageTextView.setVisibility(View.VISIBLE);
+                    messageTextView.setText(R.string.no_files_found);
+                    Toast.makeText(getActivity(), getString(R.string.no_files_found), Toast.LENGTH_SHORT).show();
+                    swipeRefreshLayout.setRefreshing(false);
+                });
+                return;
+            }
+
+            DocumentFile[] statusFiles = file.listFiles();
+
+            if (statusFiles.length <= 0) {
+                mainHandler.post(() -> {
+                    progressBar.setVisibility(View.GONE);
+                    messageTextView.setVisibility(View.VISIBLE);
+                    messageTextView.setText(R.string.no_files_found);
+                    Toast.makeText(getActivity(), getString(R.string.no_files_found), Toast.LENGTH_SHORT).show();
+                    swipeRefreshLayout.setRefreshing(false);
+                });
+                return;
+            }
+
+            for (DocumentFile documentFile : statusFiles) {
+                Status status = new Status(documentFile);
+
+                if (status.isVideo()) {
+                    videoList.add(status);
+                }
+            }
+
+            mainHandler.post(() -> {
+
+                if (videoList.size() <= 0) {
+                    messageTextView.setVisibility(View.VISIBLE);
+                    messageTextView.setText(R.string.no_files_found);
+                } else {
+                    messageTextView.setVisibility(View.GONE);
+                    messageTextView.setText("");
+                }
+
+                videoAdapter = new VideoAdapter(videoList, container);
+                recyclerView.setAdapter(videoAdapter);
+                videoAdapter.notifyItemRangeChanged(0, videoList.size());
+                progressBar.setVisibility(View.GONE);
+            });
+
+            swipeRefreshLayout.setRefreshing(false);
+
+        });
+    }
+
+    private void executeOld() {
+
+        Executors.newSingleThreadExecutor().execute(() -> {
+            Handler mainHandler = new Handler(Looper.getMainLooper());
+
+            File[] statusFiles = Common.STATUS_DIRECTORY.listFiles();
+            videoList.clear();
+
+            if (statusFiles != null && statusFiles.length > 0) {
+
+                Arrays.sort(statusFiles);
+                for (File file : statusFiles) {
+                    Status status = new Status(file, file.getName(), file.getAbsolutePath());
+
+                    if (status.isVideo()) {
+                        videoList.add(status);
+                    }
+
+                }
+
+                mainHandler.post(() -> {
+
+                    if (videoList.size() <= 0) {
+                        messageTextView.setVisibility(View.VISIBLE);
+                        messageTextView.setText(R.string.no_files_found);
+                    } else {
+                        messageTextView.setVisibility(View.GONE);
+                        messageTextView.setText("");
+                    }
+
+                    videoAdapter = new VideoAdapter(videoList, container);
+                    recyclerView.setAdapter(videoAdapter);
+                    videoAdapter.notifyItemRangeChanged(0, videoList.size());
+                    progressBar.setVisibility(View.GONE);
+                });
+
+            } else {
+
+                mainHandler.post(() -> {
+                    progressBar.setVisibility(View.GONE);
+                    messageTextView.setVisibility(View.VISIBLE);
+                    messageTextView.setText(R.string.no_files_found);
+                    Toast.makeText(getActivity(), getString(R.string.no_files_found), Toast.LENGTH_SHORT).show();
+                });
+
+            }
+            swipeRefreshLayout.setRefreshing(false);
+
+        });
+
+    }
+
 }

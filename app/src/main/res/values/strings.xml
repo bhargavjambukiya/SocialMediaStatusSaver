@@ -20,7 +20,7 @@
     <string name="no_videos_found">No Videos Found.</string>
     <string name="no_audio_found">No audio found</string>
     <string name="restart">Restart</string>
-    <string name="update_downloaded">App downloaded ad update</string>
+    <string name="update_downloaded">App downloaded and update</string>
     <!-- TODO - add your ad unit Ids -->
     <!-- AdMob ad unit IDs -->
     <string name="admob_app_id">ca-app-pub-1588927510922110~6616171826</string>
@@ -32,5 +32,9 @@
     <string name="privacy_policy">Privacy Policy</string>
     <string name="rate_us">Rate us</string>
     <string name="rate_share">Share</string>
+
+    <string name="cant_find_whatsapp_dir">Can\'t find WhatsApp Dir</string>
+    <string name="no_files_found">No Files Found</string>
+
 
 </resources>

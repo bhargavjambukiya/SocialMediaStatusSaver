@@ -2,28 +2,25 @@ package com.studio.statussave.ui.activity;
 
 import android.os.Bundle;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.MobileAds;
 import com.google.android.material.tabs.TabLayout;
 import com.studio.statussave.Constant;
 import com.studio.statussave.R;
 import com.studio.statussave.data.FilesData;
 import com.studio.statussave.ui.fragment.ImageFragment;
 import com.studio.statussave.ui.fragment.VideoFragment;
+import com.studio.statussave.ui.fragment.VideoFragmentOld;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class StoriesActivity extends BaseActivity {
-    private AdView mAdView;
+    //private AdView mAdView;
     ViewPager mViewPager;
     TabLayout tabLayout;
 
@@ -36,8 +33,8 @@ public class StoriesActivity extends BaseActivity {
 
         initializeComponents();
 
-        MobileAds.setRequestConfiguration(adMobConfiguration());
-        mAdView.loadAd(new AdRequest.Builder().build());
+        // MobileAds.setRequestConfiguration(adMobConfiguration());
+        // mAdView.loadAd(new AdRequest.Builder().build());
 
         SectionsPagerAdapter mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
         mViewPager.setAdapter(mSectionsPagerAdapter);
@@ -61,7 +58,7 @@ public class StoriesActivity extends BaseActivity {
     }
 
     private void initializeComponents() {
-        mAdView = findViewById(R.id.adView);
+        // mAdView = findViewById(R.id.adView);
         mViewPager = findViewById(R.id.container);
         tabLayout = findViewById(R.id.tabs);
     }

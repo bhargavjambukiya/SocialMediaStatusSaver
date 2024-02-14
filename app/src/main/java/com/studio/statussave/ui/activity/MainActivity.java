@@ -1,13 +1,28 @@
 package com.studio.statussave.ui.activity;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.app.ActivityManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
+import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.storage.StorageManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.ScrollView;
+import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.app.ActivityCompat;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -26,46 +41,171 @@ import com.google.android.play.core.tasks.Task;
 import com.studio.statussave.Constant;
 import com.studio.statussave.R;
 import com.studio.statussave.data.FilesData;
+import com.studio.statussave.utils.Common;
 import com.studio.statussave.utils.Util;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class MainActivity extends BaseActivity implements View.OnClickListener {
-    private static final int REQ_CODE_VERSION_UPDATE = 530;
-    private AppUpdateManager appUpdateManager;
-    private InstallStateUpdatedListener installStateUpdatedListener;
+
+    // Permission
+    private static final int REQUEST_PERMISSIONS = 1234;
+    private static final String[] PERMISSIONS = {
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+    };
+
+    private Context context;
+    @SuppressLint("InlinedApi")
+    private static final String[] NOTIFICATION_PERMISSION = {
+            Manifest.permission.POST_NOTIFICATIONS
+    };
+    private static final int NOTIFICATION_REQUEST_PERMISSIONS = 4;
+
     private ConstraintLayout constraintLayoutImages, constraintLayoutVideos, constraintLayoutConvertedAudio,
             constraintLayoutMain, constraintLayoutSaved, constraintLayoutSettings, constraintLayoutVideoSplitter;
     private AdView mAdView;
+
+
+    ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == Activity.RESULT_OK) {
+
+                    Intent data = result.getData();
+
+                    assert data != null;
+
+                    Log.d("HEY: ", data.getData().toString());
+
+                    context.getContentResolver().takePersistableUriPermission(
+                            data.getData(),
+                            Intent.FLAG_GRANT_READ_URI_PERMISSION |
+                                    Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+
+                    Toast.makeText(context, "Success", Toast.LENGTH_SHORT).show();
+
+                }
+            }
+    );
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        context = getApplicationContext();
+
         initializeComponents();
-        checkForAppUpdate();
-
-        //Permission request
-        Util.checkAndRequestPermissions(MainActivity.this);
-
-       /* Bundle bundle = new Bundle();
-        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "1");
-        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "name");
-        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "image");
-        MyApplication.mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);*/
 
 
-        MobileAds.setRequestConfiguration(adMobConfiguration());
-        mAdView.loadAd(new AdRequest.Builder().build());
+       /* if (!arePermissionDenied()) {
+            next();
+            return;
+        }*/
+
+        //CheckPermission();
+
+
+        // MobileAds.setRequestConfiguration(adMobConfiguration());
+        //mAdView.loadAd(new AdRequest.Builder().build());
+    }
+
+    private void CheckPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && arePermissionDenied()) {
+            // If Android 10+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                requestPermissionQ();
+                return;
+            }
+            requestPermissions(PERMISSIONS, REQUEST_PERMISSIONS);
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
+                ActivityCompat.checkSelfPermission(getApplicationContext(),
+                        Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(NOTIFICATION_PERMISSION,
+                    NOTIFICATION_REQUEST_PERMISSIONS);
+        }
+
+        if (Common.APP_DIR == null || Common.APP_DIR.isEmpty()) {
+            Common.APP_DIR = getExternalFilesDir("StatusDownloader").getPath();
+            Log.d("App Path", Common.APP_DIR);
+        }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        checkNewAppVersionState();
+        if (arePermissionDenied()) {
+            CheckPermission();
+        }
     }
+
+    @RequiresApi(api = Build.VERSION_CODES.Q)
+    private void requestPermissionQ() {
+        StorageManager sm = (StorageManager) context.getSystemService(Context.STORAGE_SERVICE);
+
+        Intent intent = sm.getPrimaryStorageVolume().createOpenDocumentTreeIntent();
+        String startDir = "Android%2Fmedia%2Fcom.whatsapp%2FWhatsApp%2FMedia%2F.Statuses";
+
+        Uri uri = intent.getParcelableExtra("android.provider.extra.INITIAL_URI");
+
+        String scheme = uri.toString();
+        scheme = scheme.replace("/root/", "/document/");
+        scheme += "%3A" + startDir;
+
+        uri = Uri.parse(scheme);
+
+        Log.d("URI", uri.toString());
+
+        intent.putExtra("android.provider.extra.INITIAL_URI", uri);
+        intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION
+                | Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+                | Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION);
+
+
+        activityResultLauncher.launch(intent);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQUEST_PERMISSIONS && grantResults.length > 0) {
+            if (arePermissionDenied()) {
+                // Clear Data of Application, So that it can request for permissions again
+                ((ActivityManager) Objects.requireNonNull(this.getSystemService(ACTIVITY_SERVICE))).clearApplicationUserData();
+                recreate();
+            } else {
+                // next();
+            }
+        }
+    }
+
+    private boolean arePermissionDenied() {
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            return getContentResolver().getPersistedUriPermissions().size() <= 0;
+        }
+
+        for (String permissions : PERMISSIONS) {
+            if (ActivityCompat.checkSelfPermission(getApplicationContext(), permissions) != PackageManager.PERMISSION_GRANTED) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+/*    private void next() {
+
+        handler.postDelayed(() -> {
+            startActivity(new Intent(SplashActivity.this, MainActivity.class));
+            finish();
+        }, 1000);
+
+    }*/
 
     private void initializeComponents() {
         constraintLayoutVideoSplitter = findViewById(R.id.constraintLayoutVideoSplitter);
@@ -122,147 +262,5 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         }
     }
 
-    @Override
-    protected void onDestroy() {
-        unregisterInstallStateUpdListener();
-        super.onDestroy();
-    }
-
-    private void checkForAppUpdate() {
-        // Creates instance of the manager.
-        appUpdateManager = AppUpdateManagerFactory.create(MainActivity.this);
-
-        // Returns an intent object that you use to check for an update.
-        Task<AppUpdateInfo> appUpdateInfoTask = appUpdateManager.getAppUpdateInfo();
-
-        // Create a listener to track request state updates.
-        installStateUpdatedListener = new InstallStateUpdatedListener() {
-            @Override
-            public void onStateUpdate(InstallState installState) {
-                // Show module progress, log state, or install the update.
-                if (installState.installStatus() == InstallStatus.DOWNLOADED)
-                    // After the update is downloaded, show a notification
-                    // and request user confirmation to restart the app.
-                    popupSnackbarForCompleteUpdateAndUnregister();
-            }
-        };
-
-        // Checks that the platform will allow the specified type of update.
-        appUpdateInfoTask.addOnSuccessListener(appUpdateInfo -> {
-            if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE) {
-                // Request the update.
-                if (appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.FLEXIBLE)) {
-
-                    // Before starting an update, register a listener for updates.
-                    appUpdateManager.registerListener(installStateUpdatedListener);
-                    // Start an update.
-                    startAppUpdateFlexible(appUpdateInfo);
-                } else if (appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)) {
-                    // Start an update.
-                    startAppUpdateImmediate(appUpdateInfo);
-                }
-            }
-        });
-    }
-
-    private void startAppUpdateImmediate(AppUpdateInfo appUpdateInfo) {
-        try {
-            appUpdateManager.startUpdateFlowForResult(
-                    appUpdateInfo,
-                    AppUpdateType.IMMEDIATE,
-                    // The current activity making the update request.
-                    this,
-                    // Include a request code to later monitor this update request.
-                    MainActivity.REQ_CODE_VERSION_UPDATE);
-        } catch (IntentSender.SendIntentException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void startAppUpdateFlexible(AppUpdateInfo appUpdateInfo) {
-        try {
-            appUpdateManager.startUpdateFlowForResult(
-                    appUpdateInfo,
-                    AppUpdateType.FLEXIBLE,
-                    // The current activity making the update request.
-                    this,
-                    // Include a request code to later monitor this update request.
-                    MainActivity.REQ_CODE_VERSION_UPDATE);
-        } catch (IntentSender.SendIntentException e) {
-            e.printStackTrace();
-            unregisterInstallStateUpdListener();
-        }
-    }
-
-    /**
-     * Displays the snackbar notification and call to action.
-     * Needed only for Flexible app update
-     */
-    private void popupSnackbarForCompleteUpdateAndUnregister() {
-        Snackbar snackbar =
-                Snackbar.make(constraintLayoutMain, getString(R.string.update_downloaded), Snackbar.LENGTH_INDEFINITE);
-        snackbar.setAction(R.string.restart, new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                appUpdateManager.completeUpdate();
-            }
-        });
-        snackbar.setActionTextColor(getResources().getColor(R.color.white));
-        snackbar.show();
-
-        unregisterInstallStateUpdListener();
-    }
-
-    /**
-     * Checks that the update is not stalled during 'onResume()'.
-     * However, you should execute this check at all app entry points.
-     */
-    private void checkNewAppVersionState() {
-        appUpdateManager
-                .getAppUpdateInfo()
-                .addOnSuccessListener(
-                        appUpdateInfo -> {
-                            //FLEXIBLE:
-                            // If the update is downloaded but not installed,
-                            // notify the user to complete the update.
-                            if (appUpdateInfo.installStatus() == InstallStatus.DOWNLOADED) {
-                                popupSnackbarForCompleteUpdateAndUnregister();
-                            }
-
-                            //IMMEDIATE:
-                            /*if (appUpdateInfo.updateAvailability()
-                                    == UpdateAvailability.DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS) {
-                                // If an in-app update is already running, resume the update.
-                                startAppUpdateImmediate(appUpdateInfo);
-                            }*/
-                        });
-
-    }
-
-    /**
-     * Needed only for FLEXIBLE update
-     */
-    private void unregisterInstallStateUpdListener() {
-        if (appUpdateManager != null && installStateUpdatedListener != null)
-            appUpdateManager.unregisterListener(installStateUpdatedListener);
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, final int resultCode, Intent intent) {
-        super.onActivityResult(requestCode, resultCode, intent);
-
-        switch (requestCode) {
-
-            case REQ_CODE_VERSION_UPDATE:
-                if (resultCode != RESULT_OK) { //RESULT_OK / RESULT_CANCELED / RESULT_IN_APP_UPDATE_FAILED
-                    Log.d("Update flow failed!", "Result code: " + resultCode);
-                    // If the update is cancelled or fails,
-                    // you can request to start the update again.
-                    unregisterInstallStateUpdListener();
-                }
-
-                break;
-        }
-    }
 
 }

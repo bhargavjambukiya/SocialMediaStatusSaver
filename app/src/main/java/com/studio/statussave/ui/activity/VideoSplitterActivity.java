@@ -2,7 +2,6 @@ package com.studio.statussave.ui.activity;
 
 import android.os.Bundle;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -15,8 +14,7 @@ import com.google.android.gms.ads.MobileAds;
 import com.google.android.material.tabs.TabLayout;
 import com.studio.statussave.Constant;
 import com.studio.statussave.R;
-import com.studio.statussave.ui.fragment.ImageFragment;
-import com.studio.statussave.ui.fragment.VideoFragment;
+import com.studio.statussave.ui.fragment.VideoFragmentOld;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,7 +65,7 @@ public class VideoSplitterActivity extends BaseActivity {
             fragments.clear();
          /*   fragments.add(new ImageFragment());
             fragmentNames.add(getString(R.string.tab_image));*/
-            fragments.add(new VideoFragment());
+            fragments.add(new VideoFragmentOld());
             fragmentNames.add(getString(R.string.tab_video));
         }
 

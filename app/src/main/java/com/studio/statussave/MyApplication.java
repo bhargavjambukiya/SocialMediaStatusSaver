@@ -13,7 +13,7 @@ public class MyApplication extends Application {
     public void onCreate() {
         super.onCreate();
         // initialize the AdMob app
-        MobileAds.initialize(this, getString(R.string.admob_app_id));
+       // MobileAds.initialize(this, getString(R.string.admob_app_id));
         // Obtain the FirebaseAnalytics instance.
         // mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
     }

@@ -40,7 +40,7 @@ public class VideoViewerActivity extends BaseActivity implements View.OnClickLis
     private RewardedVideoAd mRewardedVideoAd;
 
     int position;
-    private static ArrayList<File> videos;
+    private static Uri video;
     private ImageView imageViewSaveORDelete, imageViewShareFile, imageViewBack, imageViewMp3Converter, imageViewVideoSplitter;
     private VideoView vv;
     char contentType;
@@ -52,15 +52,17 @@ public class VideoViewerActivity extends BaseActivity implements View.OnClickLis
         setContentView(R.layout.activity_video_viewer);
 
 
-        initializeAd();
-
-        if (FilesData.getRecentOrSaved().equals("recent")) {
+        // initializeAd();
+      /*  if (getIntent() != null) {
+            video = (Uri) getIntent().getSerializableExtra("file");
+        }*/
+       /* if (FilesData.getRecentOrSaved().equals("recent")) {
             videos = FilesData.getWhatsAppFilesVideos();
         } else if (FilesData.getRecentOrSaved().equals("videoSplitter")) {
             videos = FilesData.getSplittedFilesVideos();
         } else {
             videos = FilesData.getSavedFilesVideos();
-        }
+        }*/
 
 
         try {
@@ -97,7 +99,7 @@ public class VideoViewerActivity extends BaseActivity implements View.OnClickLis
     }
 
     private void setUpPlayer() {
-        vv.setVideoPath(videos.get(position).getPath());
+        vv.setVideoURI(video);
         MediaController mc = new MediaController(this, false);
         vv.setMediaController(mc);
         vv.setFitsSystemWindows(true);
@@ -106,7 +108,7 @@ public class VideoViewerActivity extends BaseActivity implements View.OnClickLis
         mc.setAnchorView(vv);
         vv.start();
 
-        mc.setPrevNextListeners(v -> {
+       /* mc.setPrevNextListeners(v -> {
             // next button clicked
             if ((videos.size() - 1) == position) {
                 position = 0;
@@ -128,7 +130,7 @@ public class VideoViewerActivity extends BaseActivity implements View.OnClickLis
                 vv.setVideoPath(videos.get(--position).getPath());
                 vv.start();
             }
-        });
+        });*/
     }
 
     @Override
@@ -272,14 +274,14 @@ public class VideoViewerActivity extends BaseActivity implements View.OnClickLis
         Log.d("VideoViewer Ad", "Ad triggered reward.");
         // Toast.makeText(getBaseContext(), "Ad triggered reward.", Toast.LENGTH_SHORT).show();
         if (isVideoSplitter) {
-            File path = videos.get(position);
-            TrimVideo.activity(String.valueOf(Uri.fromFile(path)))
+            //File path = new File(video);
+            TrimVideo.activity(String.valueOf(video))
                     .setDestination(Environment.getExternalStorageDirectory().toString() + FilesData.SAVED_FILES_SPLIT_VIDEO)  //default output path /storage/emulated/0/DOWNLOADS
                     .start(this);
         } else {
             try {
                 showLoader();
-                new AudioExtractor(this).genVideoUsingMuxer(videos.get(position),
+                new AudioExtractor(this).genVideoUsingMuxer(new File(video.toString()),
                         0, true, false, mProgressDialog);
                 FilesData.audioSavedFiles();
                 hideLoader();
