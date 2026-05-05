@@ -1,0 +1,39 @@
+# Local signing secrets (copy from keystore.properties.example)
+keystore.properties
+
+# Keystore binaries (never commit signing keys if repo is public)
+*.jks
+*.keystore
+
+# Gradle
+.gradle/
+
+# Local machine / SDK paths (never commit)
+local.properties
+
+# Build outputs
+build/
+**/build/
+
+# Kotlin
+.kotlin/
+
+# Android Studio / IntelliJ
+.idea/
+*.iml
+
+# OS
+.DS_Store
+Thumbs.db
+
+# NDK / CMake
+.externalNativeBuild/
+.cxx/
+
+# Captures / profiling
+captures/
+
+# Log / temp
+*.log
+*.tmp
+*.temp

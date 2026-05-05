@@ -1,21 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:aapt="http://schemas.android.com/aapt"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/constraintLayoutMain"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/bg"
-    android:fillViewport="true"
     tools:context=".ui.activity.MainActivity">
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:clipToPadding="false"
         android:fillViewport="true"
-        android:padding="@dimen/_12sdp"
-        app:layout_constraintBottom_toTopOf="@+id/adView"
+        android:overScrollMode="never"
+        android:paddingStart="@dimen/_14sdp"
+        android:paddingTop="@dimen/_16sdp"
+        android:paddingEnd="@dimen/_14sdp"
+        android:paddingBottom="@dimen/_12sdp"
+        app:layout_constraintBottom_toTopOf="@+id/native_ad_container"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -23,53 +26,81 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
+            android:gravity="center_horizontal"
             android:orientation="vertical">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <!-- Hero -->
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:paddingBottom="@dimen/_16sdp">
 
                 <TextView
-                    android:id="@+id/textViewTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Status Saver"
-                    android:textColor="@android:color/white"
-                    android:textSize="@dimen/_14ssp"
-                    android:textStyle="bold"
-                    android:visibility="gone"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:letterSpacing="0.02"
+                    android:text="@string/app_name"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_26ssp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_8sdp"
+                    android:gravity="center"
+                    android:lineSpacingMultiplier="1.25"
+                    android:text="@string/home_tagline"
+                    android:textColor="@color/text_on_dark_secondary"
+                    android:textSize="@dimen/_12ssp" />
+            </LinearLayout>
+
+            <!-- Row 1 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:baselineAligned="false"
+                android:orientation="horizontal">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/constraintLayoutImages"
-                    android:layout_width="@dimen/_100sdp"
-                    android:layout_height="@dimen/_100sdp"
-                    android:layout_marginTop="@dimen/_4sdp"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/_114sdp"
+                    android:layout_marginEnd="@dimen/_6sdp"
+                    android:layout_weight="1"
                     android:background="@drawable/item_green"
-                    app:layout_constraintEnd_toStartOf="@+id/constraintLayoutVideos"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textViewTitle">
+                    android:clickable="true"
+                    android:elevation="6dp"
+                    android:focusable="true"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    android:contentDescription="@string/cd_home_tile_status_images">
 
                     <ImageView
                         android:id="@+id/imageView"
-                        android:layout_width="@dimen/_55sdp"
-                        android:layout_height="@dimen/_60sdp"
-                        android:layout_marginTop="@dimen/_8sdp"
+                        android:layout_width="@dimen/_52sdp"
+                        android:layout_height="@dimen/_52sdp"
+                        android:layout_marginTop="@dimen/_14sdp"
+                        android:importantForAccessibility="no"
                         android:src="@drawable/ic_image"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:tint="@android:color/white" />
+                        app:tint="@color/white" />
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:text="Status Images"
-                        android:textColor="@android:color/white"
+                        android:layout_marginStart="@dimen/_6sdp"
+                        android:layout_marginEnd="@dimen/_6sdp"
+                        android:layout_marginBottom="@dimen/_12sdp"
+                        android:gravity="center"
+                        android:maxLines="2"
+                        android:text="@string/home_tile_status_images"
+                        android:textColor="@color/white"
                         android:textSize="@dimen/_12ssp"
+                        android:textStyle="bold"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -78,87 +109,235 @@
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/constraintLayoutVideos"
-                    android:layout_width="@dimen/_100sdp"
-                    android:layout_height="@dimen/_100sdp"
-                    android:layout_marginTop="@dimen/_4sdp"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/_114sdp"
+                    android:layout_marginStart="@dimen/_6sdp"
+                    android:layout_weight="1"
                     android:background="@drawable/item_blue"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toEndOf="@+id/constraintLayoutImages"
-                    app:layout_constraintTop_toBottomOf="@+id/textViewTitle">
+                    android:clickable="true"
+                    android:elevation="6dp"
+                    android:focusable="true"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    android:contentDescription="@string/cd_home_tile_status_videos">
 
                     <ImageView
                         android:id="@+id/imageviewvideo"
-                        android:layout_width="@dimen/_60sdp"
-                        android:layout_height="@dimen/_50sdp"
-                        android:layout_marginTop="@dimen/_12sdp"
+                        android:layout_width="@dimen/_52sdp"
+                        android:layout_height="@dimen/_44sdp"
+                        android:layout_marginTop="@dimen/_16sdp"
+                        android:importantForAccessibility="no"
                         android:src="@drawable/ic_video"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:tint="@android:color/white" />
+                        app:tint="@color/white" />
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_6sdp"
-                        android:text="Status Videos"
-                        android:textColor="@android:color/white"
+                        android:layout_marginStart="@dimen/_6sdp"
+                        android:layout_marginEnd="@dimen/_6sdp"
+                        android:layout_marginBottom="@dimen/_12sdp"
+                        android:gravity="center"
+                        android:maxLines="2"
+                        android:text="@string/home_tile_status_videos"
+                        android:textColor="@color/white"
                         android:textSize="@dimen/_12ssp"
+                        android:textStyle="bold"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/imageviewvideo" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
+            </LinearLayout>
 
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constraintLayoutAllStatuses"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_88sdp"
+                android:layout_marginTop="@dimen/_12sdp"
+                android:background="@drawable/item_purple1"
+                android:clickable="true"
+                android:elevation="6dp"
+                android:focusable="true"
+                android:foreground="?android:attr/selectableItemBackground"
+                android:contentDescription="@string/cd_home_tile_all_statuses">
+
+                <ImageView
+                    android:id="@+id/imageViewAllStatuses"
+                    android:layout_width="@dimen/_44sdp"
+                    android:layout_height="@dimen/_44sdp"
+                    android:layout_marginStart="@dimen/_14sdp"
+                    android:importantForAccessibility="no"
+                    android:src="@drawable/ic_image"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:tint="@color/white" />
+
+                <LinearLayout
+                    android:id="@+id/layoutAllStatusesText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_12sdp"
+                    android:layout_marginEnd="@dimen/_10sdp"
+                    android:gravity="center_vertical"
+                    android:orientation="vertical"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/imageViewAllStatusesChevron"
+                    app:layout_constraintStart_toEndOf="@+id/imageViewAllStatuses"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <TextView
+                        android:id="@+id/textViewAllStatusesTitle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/home_tile_all_statuses"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/_15ssp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/textViewAllStatusesSubtitle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_4sdp"
+                        android:alpha="0.92"
+                        android:lineSpacingMultiplier="1.15"
+                        android:text="@string/home_tile_all_statuses_subtitle"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/_10ssp" />
+                </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/imageViewAllStatusesChevron"
+                    android:layout_width="@dimen/_22sdp"
+                    android:layout_height="@dimen/_22sdp"
+                    android:layout_marginEnd="@dimen/_12sdp"
+                    android:importantForAccessibility="no"
+                    android:src="@drawable/ic_chevron_right"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:tint="@color/white" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constraintLayoutRemoveAds"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_88sdp"
+                android:layout_marginTop="@dimen/_12sdp"
+                android:background="@drawable/item_orange"
+                android:clickable="true"
+                android:elevation="6dp"
+                android:focusable="true"
+                android:foreground="?android:attr/selectableItemBackground"
+                android:contentDescription="@string/cd_home_tile_remove_ads">
+
+                <ImageView
+                    android:id="@+id/imageViewRemoveAds"
+                    android:layout_width="@dimen/_44sdp"
+                    android:layout_height="@dimen/_44sdp"
+                    android:layout_marginStart="@dimen/_14sdp"
+                    android:importantForAccessibility="no"
+                    android:src="@drawable/ic_premium_star"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:tint="@color/white" />
+
+                <LinearLayout
+                    android:id="@+id/layoutRemoveAdsText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_12sdp"
+                    android:layout_marginEnd="@dimen/_10sdp"
+                    android:gravity="center_vertical"
+                    android:orientation="vertical"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/imageViewRemoveAdsChevron"
+                    app:layout_constraintStart_toEndOf="@+id/imageViewRemoveAds"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <TextView
+                        android:id="@+id/textViewRemoveAdsTitle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/home_tile_remove_ads"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/_15ssp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/textViewRemoveAdsSubtitle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_4sdp"
+                        android:alpha="0.92"
+                        android:lineSpacingMultiplier="1.15"
+                        android:text="@string/home_tile_remove_ads_subtitle"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/_10ssp" />
+                </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/imageViewRemoveAdsChevron"
+                    android:layout_width="@dimen/_22sdp"
+                    android:layout_height="@dimen/_22sdp"
+                    android:layout_marginEnd="@dimen/_12sdp"
+                    android:importantForAccessibility="no"
+                    android:src="@drawable/ic_chevron_right"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:tint="@color/white" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <!-- Row 2 -->
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_10sdp">
-
-                <TextView
-                    android:id="@+id/textViewTitle1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Status Saver"
-                    android:textColor="@android:color/white"
-                    android:textSize="@dimen/_14ssp"
-                    android:textStyle="bold"
-                    android:visibility="invisible"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                android:layout_marginTop="@dimen/_12sdp"
+                android:baselineAligned="false"
+                android:orientation="horizontal">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/constraintLayoutConvertedAudio"
-                    android:layout_width="@dimen/_100sdp"
-                    android:layout_height="@dimen/_100sdp"
-                    android:layout_marginTop="@dimen/_4sdp"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/_114sdp"
+                    android:layout_marginEnd="@dimen/_6sdp"
+                    android:layout_weight="1"
                     android:background="@drawable/item_purple"
-                    app:layout_constraintEnd_toStartOf="@+id/constraintLayoutSaved"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textViewTitle1">
+                    android:clickable="true"
+                    android:elevation="6dp"
+                    android:focusable="true"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    android:contentDescription="@string/cd_home_tile_audio">
 
                     <ImageView
                         android:id="@+id/imageViewAudio"
-                        android:layout_width="@dimen/_55sdp"
-                        android:layout_height="@dimen/_45sdp"
+                        android:layout_width="@dimen/_52sdp"
+                        android:layout_height="@dimen/_44sdp"
                         android:layout_marginTop="@dimen/_16sdp"
+                        android:importantForAccessibility="no"
                         android:src="@drawable/ic_audio"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:tint="@android:color/white" />
+                        app:tint="@color/white" />
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_4sdp"
-                        android:text="Converted Audio"
-                        android:textColor="@android:color/white"
+                        android:layout_marginStart="@dimen/_6sdp"
+                        android:layout_marginEnd="@dimen/_6sdp"
+                        android:layout_marginBottom="@dimen/_12sdp"
+                        android:gravity="center"
+                        android:maxLines="2"
+                        android:text="@string/home_tile_extracted_audio"
+                        android:textColor="@color/white"
                         android:textSize="@dimen/_12ssp"
+                        android:textStyle="bold"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -167,139 +346,183 @@
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/constraintLayoutSaved"
-                    android:layout_width="@dimen/_100sdp"
-                    android:layout_height="@dimen/_100sdp"
-                    android:layout_marginTop="@dimen/_4sdp"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/_114sdp"
+                    android:layout_marginStart="@dimen/_6sdp"
+                    android:layout_weight="1"
                     android:background="@drawable/item_orange"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toEndOf="@+id/constraintLayoutConvertedAudio"
-                    app:layout_constraintTop_toBottomOf="@+id/textViewTitle1">
+                    android:clickable="true"
+                    android:elevation="6dp"
+                    android:focusable="true"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    android:contentDescription="@string/cd_home_tile_saved">
 
                     <ImageView
                         android:id="@+id/imageViewDownload"
-                        android:layout_width="@dimen/_55sdp"
-                        android:layout_height="@dimen/_45sdp"
+                        android:layout_width="@dimen/_52sdp"
+                        android:layout_height="@dimen/_44sdp"
                         android:layout_marginTop="@dimen/_16sdp"
+                        android:importantForAccessibility="no"
                         android:src="@drawable/ic_download"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:tint="@android:color/white" />
+                        app:tint="@color/white" />
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_4sdp"
-                        android:text="Saved"
-                        android:textColor="@android:color/white"
+                        android:layout_marginStart="@dimen/_6sdp"
+                        android:layout_marginEnd="@dimen/_6sdp"
+                        android:layout_marginBottom="@dimen/_12sdp"
+                        android:gravity="center"
+                        android:maxLines="2"
+                        android:text="@string/home_tile_saved"
+                        android:textColor="@color/white"
                         android:textSize="@dimen/_12ssp"
+                        android:textStyle="bold"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/imageViewDownload" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
+            </LinearLayout>
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <!-- Row 3 -->
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_10sdp">
-
-                <TextView
-                    android:id="@+id/textViewTitle3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@android:color/white"
-                    android:textSize="@dimen/_14ssp"
-                    android:textStyle="bold"
-                    android:visibility="invisible"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                android:layout_marginTop="@dimen/_12sdp"
+                android:baselineAligned="false"
+                android:orientation="horizontal">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/constraintLayoutVideoSplitter"
-                    android:layout_width="@dimen/_100sdp"
-                    android:layout_height="@dimen/_100sdp"
-                    android:layout_marginTop="@dimen/_4sdp"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/_114sdp"
+                    android:layout_marginEnd="@dimen/_6sdp"
+                    android:layout_weight="1"
                     android:background="@drawable/item_red"
-                    app:layout_constraintEnd_toStartOf="@+id/constraintLayoutSettings"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textViewTitle3">
+                    android:clickable="true"
+                    android:elevation="6dp"
+                    android:focusable="true"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    android:contentDescription="@string/cd_home_tile_trim">
 
                     <ImageView
                         android:id="@+id/imageViewVideoSplitter"
-                        android:layout_width="@dimen/_55sdp"
-                        android:layout_height="@dimen/_45sdp"
-                        android:layout_marginTop="@dimen/_16sdp"
+                        android:layout_width="@dimen/_52sdp"
+                        android:layout_height="@dimen/_44sdp"
+                        android:layout_marginTop="@dimen/_12sdp"
+                        android:importantForAccessibility="no"
                         android:src="@drawable/ic_video_splitter"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:tint="@android:color/white" />
+                        app:tint="@color/white" />
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:id="@+id/textConvertedTitle"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_4sdp"
-                        android:text="Converted Video"
-                        android:textColor="@android:color/white"
-                        android:textSize="@dimen/_12ssp"
+                        android:layout_marginStart="@dimen/_4sdp"
+                        android:layout_marginEnd="@dimen/_4sdp"
+                        android:gravity="center"
+                        android:maxLines="2"
+                        android:text="@string/home_tile_converted_title"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/_11ssp"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toTopOf="@+id/textConvertedSubtitle"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/imageViewVideoSplitter"
+                        app:layout_constraintVertical_chainStyle="packed" />
+
+                    <TextView
+                        android:id="@+id/textConvertedSubtitle"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_4sdp"
+                        android:layout_marginEnd="@dimen/_4sdp"
+                        android:layout_marginBottom="@dimen/_10sdp"
+                        android:alpha="0.92"
+                        android:gravity="center"
+                        android:maxLines="2"
+                        android:text="@string/home_tile_converted_subtitle"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/_9ssp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/imageViewVideoSplitter" />
+                        app:layout_constraintTop_toBottomOf="@+id/textConvertedTitle" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/constraintLayoutSettings"
-                    android:layout_width="@dimen/_100sdp"
-                    android:layout_height="@dimen/_100sdp"
-                    android:layout_marginTop="@dimen/_4sdp"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/_114sdp"
+                    android:layout_marginStart="@dimen/_6sdp"
+                    android:layout_weight="1"
                     android:background="@drawable/item_purple1"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toEndOf="@+id/constraintLayoutVideoSplitter"
-                    app:layout_constraintTop_toBottomOf="@+id/textViewTitle3">
+                    android:clickable="true"
+                    android:elevation="6dp"
+                    android:focusable="true"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    android:contentDescription="@string/cd_home_tile_settings">
 
                     <ImageView
                         android:id="@+id/imageViewSettings"
-                        android:layout_width="@dimen/_55sdp"
-                        android:layout_height="@dimen/_45sdp"
+                        android:layout_width="@dimen/_52sdp"
+                        android:layout_height="@dimen/_44sdp"
                         android:layout_marginTop="@dimen/_16sdp"
+                        android:importantForAccessibility="no"
                         android:src="@drawable/ic_settings"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:tint="@android:color/white" />
+                        app:tint="@color/white" />
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_4sdp"
-                        android:text="Settings"
-                        android:textColor="@android:color/white"
+                        android:layout_marginStart="@dimen/_6sdp"
+                        android:layout_marginEnd="@dimen/_6sdp"
+                        android:layout_marginBottom="@dimen/_12sdp"
+                        android:gravity="center"
+                        android:maxLines="2"
+                        android:text="@string/home_tile_settings"
+                        android:textColor="@color/white"
                         android:textSize="@dimen/_12ssp"
+                        android:textStyle="bold"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/imageViewSettings" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-
+            </LinearLayout>
         </LinearLayout>
     </ScrollView>
 
-    <com.google.android.gms.ads.AdView
-        android:id="@+id/adView"
+    <FrameLayout
+        android:id="@+id/native_ad_container"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/native_ad_slot_height"
+        android:clipChildren="true"
+        android:clipToPadding="true"
+        android:paddingStart="@dimen/_8sdp"
+        android:paddingEnd="@dimen/_8sdp"
+        android:paddingBottom="@dimen/_4sdp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <!-- Home: banner hidden for now; re-enable by setting visible and attaching in MainActivity. -->
+    <FrameLayout
+        android:id="@+id/banner_ad_container"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:adSize="SMART_BANNER"
-        app:adUnitId="@string/banner_home_footer"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

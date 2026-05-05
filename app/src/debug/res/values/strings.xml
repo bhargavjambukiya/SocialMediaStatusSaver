@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--
+      Google sample AdMob app & ad unit IDs (debug only).
+      https://developers.google.com/admob/android/test-ads#sample_ad_units
+      Release: main/res/values/strings.xml
+    -->
+    <string name="admob_app_id" translatable="false">ca-app-pub-3940256099942544~3347511713</string>
+    <string name="banner_home_footer" translatable="false">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="rewarded_video" translatable="false">ca-app-pub-3940256099942544/5224354917</string>
+    <string name="interstitial_main" translatable="false">ca-app-pub-3940256099942544/1033173712</string>
+    <string name="native_ad" translatable="false">ca-app-pub-3940256099942544/2247696110</string>
+    <!-- Paste your device hash from Logcat: "Use RequestConfiguration.Builder().setTestDeviceIds(Arrays.asList(\"XXXX\"" -->
+    <string name="admob_optional_test_device_id" translatable="false"></string>
+</resources>

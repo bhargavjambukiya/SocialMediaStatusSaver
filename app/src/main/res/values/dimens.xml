@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Reserved height for native ad row (keeps list / home content usable). -->
+    <!-- Taller slot so headline/body + 120dp MediaView + CTA fit (AdMob min MediaView size). -->
+    <dimen name="native_ad_slot_height">300dp</dimen>
+</resources>

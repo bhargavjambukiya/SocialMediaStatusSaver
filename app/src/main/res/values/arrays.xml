@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="app_language_tags" translatable="false">
+        <item>en</item>
+        <item>hi</item>
+        <item>gu</item>
+        <item>pt</item>
+        <item>ru</item>
+        <item>es</item>
+        <item>ar</item>
+    </string-array>
+    <string-array name="language_line_primary" translatable="false">
+        <item>English</item>
+        <item>हिन्दी</item>
+        <item>ગુજરાતી</item>
+        <item>Português</item>
+        <item>Русский</item>
+        <item>Español</item>
+        <item>العربية</item>
+    </string-array>
+    <string-array name="language_line_secondary" translatable="false">
+        <item>English</item>
+        <item>Hindi</item>
+        <item>Gujarati</item>
+        <item>Portuguese</item>
+        <item>Russian</item>
+        <item>Spanish</item>
+        <item>Arabic</item>
+    </string-array>
+</resources>

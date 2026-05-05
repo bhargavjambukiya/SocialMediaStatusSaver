@@ -1,8 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#353A56</color>
-    <color name="colorPrimaryDark">#353A56</color>
-    <!-- <color name="colorAccent">#282A3B</color>-->
-    <color name="colorAccent">#353A56</color>
-    <color name="white">#ffffff</color>
+    <!-- App chrome & toolbars -->
+    <color name="colorPrimary">#152238</color>
+    <color name="colorPrimaryDark">#0B1424</color>
+    <color name="colorAccent">#22D3EE</color>
+    <color name="white">#FFFFFF</color>
+    <!-- Dialogs & light surfaces -->
+    <color name="text_secondary">#64748B</color>
+    <color name="surface_muted">#F1F5F9</color>
+    <color name="path_border">#CBD5E1</color>
+    <!-- Main screen & dark UI -->
+    <color name="colorBackgroundDark">#0B1120</color>
+    <color name="text_on_dark_secondary">#94A3B8</color>
+    <color name="tab_text_inactive">#94A3B8</color>
+    <!-- Video viewer bottom sheet -->
+    <color name="video_panel_surface">#1C1C1E</color>
+    <color name="video_tool_card">#2C2C2E</color>
+    <color name="video_text_muted">#8E8E93</color>
+    <!-- Support form: hints must read on #0D1524 field background -->
+    <color name="support_hint_label">#E2E8F0</color>
+    <color name="support_hint_edittext">#CBD5E1</color>
+    <color name="lang_row_stroke_idle">#3D4F66</color>
+    <color name="native_ad_bg">#152238</color>
 </resources>

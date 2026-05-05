@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Do not restore first-run / access prefs after reinstall (language picker, SAF onboarding, tree URI). -->
+<full-backup-content>
+    <exclude domain="sharedpref" path="reel_vault_app_prefs.xml" />
+    <exclude domain="sharedpref" path="wa_status_prefs.xml" />
+    <exclude domain="sharedpref" path="billing_entitlement_prefs.xml" />
+</full-backup-content>
