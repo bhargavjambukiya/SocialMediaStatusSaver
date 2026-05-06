@@ -50,6 +50,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 
 import com.studio.statusvault.ui.StatusPickerHintOverlay;
 import com.studio.statusvault.utils.StatusOnboardingHelper;
+import com.studio.statusvault.utils.WalkthroughHelper;
 import com.studio.statusvault.utils.WhatsAppAccessHelper;
 
 public class MainActivity extends BaseActivity implements View.OnClickListener {
@@ -76,6 +77,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         setContentView(R.layout.activity_main);
 
         initializeComponents();
+        if (savedInstanceState == null && WalkthroughHelper.shouldShow(this)) {
+            startActivity(new Intent(this, WalkthroughActivity.class));
+        }
         checkForAppUpdate();
 
        /* Bundle bundle = new Bundle();

@@ -185,4 +185,16 @@
     <string name="video_tool_ad_cancelled_download">تم إلغاء التنزيل.</string>
     <string name="video_tool_ad_cancelled_share">تم إلغاء المشاركة.</string>
     <string name="image_tool_ad_cancelled_download">تم إلغاء التنزيل.</string>
+    <string name="walkthrough_heading">كيف يعمل؟</string>
+    <string name="walkthrough_step_number">الخطوة %1$d</string>
+    <string name="walkthrough_step_1_title">افتح واتساب</string>
+    <string name="walkthrough_step_1_body">افتح واتساب وادخل تبويب الحالات أولاً لتحميل الحالات الحديثة.</string>
+    <string name="walkthrough_step_2_title">شاهد الحالة حتى النهاية</string>
+    <string name="walkthrough_step_2_body">شاهد الحالة بالكامل حتى تصبح متاحة في Status Vault.</string>
+    <string name="walkthrough_step_3_title">حفظ أو مشاركة أو تعديل</string>
+    <string name="walkthrough_step_3_body">افتح أي حالة لحفظها أو مشاركتها أو قص الفيديو أو استخراج الصوت.</string>
+    <string name="walkthrough_previous">السابق</string>
+    <string name="walkthrough_next">التالي</string>
+    <string name="walkthrough_done">تم</string>
+    <string name="walkthrough_image_content_description">صورة شرح خطوات الاستخدام</string>
 </resources>

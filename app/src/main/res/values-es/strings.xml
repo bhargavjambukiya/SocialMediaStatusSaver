@@ -185,4 +185,16 @@
     <string name="video_tool_ad_cancelled_download">Descarga cancelada.</string>
     <string name="video_tool_ad_cancelled_share">Compartir cancelado.</string>
     <string name="image_tool_ad_cancelled_download">Descarga cancelada.</string>
+    <string name="walkthrough_heading">Como funciona?</string>
+    <string name="walkthrough_step_number">Paso %1$d</string>
+    <string name="walkthrough_step_1_title">Abre WhatsApp</string>
+    <string name="walkthrough_step_1_body">Abre WhatsApp y entra en la pestana Estados para cargar los estados recientes.</string>
+    <string name="walkthrough_step_2_title">Mira el estado completo</string>
+    <string name="walkthrough_step_2_body">Mira el estado hasta el final para que aparezca en Status Vault.</string>
+    <string name="walkthrough_step_3_title">Guardar, compartir o editar</string>
+    <string name="walkthrough_step_3_body">Abre cualquier estado para guardarlo, compartirlo, recortar videos o extraer audio.</string>
+    <string name="walkthrough_previous">Anterior</string>
+    <string name="walkthrough_next">Siguiente</string>
+    <string name="walkthrough_done">Listo</string>
+    <string name="walkthrough_image_content_description">Imagen de guia del tutorial</string>
 </resources>

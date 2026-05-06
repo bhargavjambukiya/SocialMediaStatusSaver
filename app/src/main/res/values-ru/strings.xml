@@ -185,4 +185,16 @@
     <string name="video_tool_ad_cancelled_download">Загрузка отменена.</string>
     <string name="video_tool_ad_cancelled_share">Отправка отменена.</string>
     <string name="image_tool_ad_cancelled_download">Загрузка отменена.</string>
+    <string name="walkthrough_heading">Как это работает?</string>
+    <string name="walkthrough_step_number">Шаг %1$d</string>
+    <string name="walkthrough_step_1_title">Откройте WhatsApp</string>
+    <string name="walkthrough_step_1_body">Откройте WhatsApp и вкладку статусов, чтобы загрузились недавние статусы.</string>
+    <string name="walkthrough_step_2_title">Смотрите статус до конца</string>
+    <string name="walkthrough_step_2_body">Просмотрите статус полностью, чтобы он появился в Status Vault.</string>
+    <string name="walkthrough_step_3_title">Сохранить, поделиться или изменить</string>
+    <string name="walkthrough_step_3_body">Откройте любой статус, чтобы сохранить, поделиться, обрезать видео или извлечь аудио.</string>
+    <string name="walkthrough_previous">Назад</string>
+    <string name="walkthrough_next">Далее</string>
+    <string name="walkthrough_done">Готово</string>
+    <string name="walkthrough_image_content_description">Изображение экрана инструкций</string>
 </resources>

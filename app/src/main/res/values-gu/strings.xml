@@ -185,4 +185,16 @@
     <string name="video_tool_ad_cancelled_download">ડાઉનલોડ રદ.</string>
     <string name="video_tool_ad_cancelled_share">શેર રદ.</string>
     <string name="image_tool_ad_cancelled_download">ડાઉનલોડ રદ.</string>
+    <string name="walkthrough_heading">આ કેવી રીતે કામ કરે છે?</string>
+    <string name="walkthrough_step_number">પગલું %1$d</string>
+    <string name="walkthrough_step_1_title">WhatsApp ખોલો</string>
+    <string name="walkthrough_step_1_body">તાજેતરના સ્ટેટસ લોડ કરવા WhatsApp ખોલો અને Status ટૅબ જુઓ.</string>
+    <string name="walkthrough_step_2_title">સ્ટેટસ અંત સુધી જુઓ</string>
+    <string name="walkthrough_step_2_body">સ્ટેટસ પૂરો જુઓ જેથી તે Status Vault માં ઉપલબ્ધ થાય.</string>
+    <string name="walkthrough_step_3_title">સાચવો, શેર કરો અથવા એડિટ કરો</string>
+    <string name="walkthrough_step_3_body">કોઈપણ સ્ટેટસ ખોલીને સાચવો, શેર કરો, વિડિયો ટ્રિમ કરો અથવા ઑડિયો કાઢો.</string>
+    <string name="walkthrough_previous">પાછલું</string>
+    <string name="walkthrough_next">આગળ</string>
+    <string name="walkthrough_done">પૂર્ણ</string>
+    <string name="walkthrough_image_content_description">વૉકથ્રૂ સ્ક્રીનની ઇમેજ</string>
 </resources>
