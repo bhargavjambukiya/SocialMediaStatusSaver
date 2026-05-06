@@ -21,6 +21,9 @@ import com.android.billingclient.api.QueryProductDetailsParams;
 import com.android.billingclient.api.QueryPurchasesParams;
 import com.studio.statusvault.R;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -257,6 +260,22 @@ public final class PlayBillingController implements PurchasesUpdatedListener {
         }
     }
 
+    /**
+     * Play’s {@link Purchase#getOriginalJson()} {@code purchaseState} is authoritative for
+     * canceled/refunded one-time purchases: {@code 1} = canceled (includes refund), {@code 0} = purchased,
+     * {@code 2} = pending. The Billing client can still report {@link Purchase.PurchaseState#PURCHASED}
+     * briefly after a refund, so we must not grant premium from those rows.
+     */
+    private static boolean isCanceledOrRefundedInPurchaseJson(@NonNull Purchase purchase) {
+        try {
+            JSONObject o = new JSONObject(purchase.getOriginalJson());
+            int ps = o.optInt("purchaseState", -1);
+            return ps == 1;
+        } catch (JSONException e) {
+            return false;
+        }
+    }
+
     private void processPurchases(@Nullable List<Purchase> purchases) {
         String productId = app.getString(R.string.one_time_premium_product_id);
         boolean active = false;
@@ -264,6 +283,9 @@ public final class PlayBillingController implements PurchasesUpdatedListener {
         if (purchases != null) {
             for (Purchase purchase : purchases) {
                 if (!purchase.getProducts().contains(productId)) {
+                    continue;
+                }
+                if (isCanceledOrRefundedInPurchaseJson(purchase)) {
                     continue;
                 }
                 if (purchase.getPurchaseState() == Purchase.PurchaseState.PENDING) {
@@ -296,8 +318,8 @@ public final class PlayBillingController implements PurchasesUpdatedListener {
 
     @Override
     public void onPurchasesUpdated(@NonNull BillingResult billingResult, @Nullable List<Purchase> purchases) {
-        if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK && purchases != null) {
-            processPurchases(purchases);
+        if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK) {
+            processPurchases(purchases != null ? purchases : Collections.emptyList());
         } else if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.USER_CANCELED) {
             if (purchaseFlowCallback != null) {
                 purchaseFlowCallback.onUserCancelled();
